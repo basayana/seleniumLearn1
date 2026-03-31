@@ -1,0 +1,4 @@
+ pytest .\tests\steps\test_login_HRM.py - to run cucumber
+
+
+tests/features/login_HRM.feature - to run feature file directly, you can not run in python_bdd
