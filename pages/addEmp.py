@@ -16,14 +16,14 @@ class AddEmp(basePage):
     _SUBMIT_BUTTON = (By.XPATH, "//button[@type='submit']")
     _SAVD_CONFIRMATION_MESSAGE = (By.XPATH, "//p[normalize-space()='Successfully Saved']")
 
-    def add_user(self):
+    def add_user(self, firstname, middlename, lastname):
         self.wait_and_click(self._PIM_SEARCH)
         self.wait_and_click(self._EMP_ADD_LINK)
 
         self.wait_and_click(self._FIRST_NAME_TEXTBOX, timeout=20)
-        self.driver.find_element(*self._FIRST_NAME_TEXTBOX).send_keys("Fname1")
-        self.driver.find_element(*self._MIDDLE_NAME_TEXTBOX).send_keys("Mname1")
-        self.driver.find_element(*self._LAST_NAME_TEXTBOX).send_keys("Lname1")
+        self.driver.find_element(*self._FIRST_NAME_TEXTBOX).send_keys(firstname)
+        self.driver.find_element(*self._MIDDLE_NAME_TEXTBOX).send_keys(middlename)
+        self.driver.find_element(*self._LAST_NAME_TEXTBOX).send_keys(lastname)
         self.driver.find_element(*self._SUBMIT_BUTTON).click()
         self.wait_for_element(self._SAVD_CONFIRMATION_MESSAGE)
 
@@ -34,10 +34,11 @@ class AddEmp(basePage):
     _DELETE_BUTTON = (By.XPATH, "//button[normalize-space()='Delete Selected']")
     _CONFIRM_DELETE_BUTTON = (By.XPATH, "//button[normalize-space()='Yes, Delete']")
     _CONFIRM_DELETE_MESSAGE = (By.XPATH, "//p[normalize-space()='Successfully Deleted']")
-    def delete_emp(self):
+    def delete_emp(self, firstname, middlename, lastname):
         self.wait_and_click(self._EMP_LIST_LINK)
         self.wait_for_element(self._EMP_NAME_TEXTBOX)
-        self.driver.find_element(*self._EMP_NAME_TEXTBOX).send_keys("Fname1 Mname1 Lname1")
+        full_name = f"{firstname} {middlename} {lastname}"
+        self.driver.find_element(*self._EMP_NAME_TEXTBOX).send_keys(full_name)
         self.driver.find_element(*self._SEARCH_BUTTON).click()
         self.wait_and_click(self._SELECT_ALL_CHECKBOX)
         self.wait_and_click(self._DELETE_BUTTON)
