@@ -1,6 +1,7 @@
 import pickle
 import json
 import os
+import time
 
 import pytest
 from selenium import webdriver
@@ -19,6 +20,10 @@ def pytest_bdd_before_scenario(request, feature, scenario):
 
 def pytest_bdd_before_step(request, feature, scenario, step, step_func):
     print(f"Executing step: {step.name}")
+
+def pytest_bdd_after_scenario(request, feature, scenario):
+    print(f"Completed step: {scenario.name}")
+    time.sleep(10)
 
 # Add a command-line option for browser selection
 def pytest_addoption(parser):

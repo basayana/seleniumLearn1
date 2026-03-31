@@ -15,4 +15,3 @@ class UserSearchHRM(basePage):
         self.wait_and_click(self._ADMIN_SEARCH)
         self.wait_and_click(self._USER_DROPDOWN)
         self.wait_and_click(self._ESS_DROPDOWN)
-        time.sleep(10)
