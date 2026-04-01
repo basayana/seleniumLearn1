@@ -1,6 +1,7 @@
 import time
 
 from pages.addEmp import AddEmp
+from pages.my_info_page import MyInfoPage
 from pages.signin_HRM import OrangeHRM
 from pages.user_search_HRM import UserSearchHRM
 from utils.excel_util import get_credentials_from_excel, get_employee_details_from_excel
@@ -34,3 +35,12 @@ def delete_emp_scenario(driver):
     middlename = emp_details['middlename']
     lastname = emp_details['lastname']
     add_emp_page.delete_emp(firstname, middlename, lastname)
+
+def save_myInfo(driver):
+    myInfo_page = MyInfoPage(driver)
+    emp_details = get_employee_details_from_excel('tests/testdata/HRM.xlsx', 'myInfo')[0]  # Get first employee
+    firstname = emp_details['firstname']
+    middlename = emp_details['middlename']
+    lastname = emp_details['lastname']
+    myInfo_page.update_myInfo(firstname, middlename, lastname)
+    assert driver.find_element(*myInfo_page._SAVE_CONFIRMATION_MESSAGE).is_displayed()
