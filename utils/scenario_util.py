@@ -17,6 +17,7 @@ def scenario_login(driver, config):
 def scenario_admin_search(driver):
     admin_page = UserSearchHRM(driver)
     admin_page.select_admin_user_type()
+    assert driver.find_element(*admin_page._ADMIN_ROLE).is_displayed()
 
 def add_emp_scenario(driver):
     add_emp_page = AddEmp(driver)
