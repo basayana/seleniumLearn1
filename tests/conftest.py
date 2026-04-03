@@ -2,6 +2,7 @@ import pickle
 import json
 import os
 import time
+from pages.basePage import basePage
 
 import pytest
 from selenium import webdriver
@@ -10,6 +11,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from selenium.webdriver.chrome.options import Options
 import configparser
+
+from utils.scenario_util import scenario_login
 
 COOKIES_FILE = "session/cookies.pkl"
 LOCAL_STORAGE_FILE = "session/local_storage.json"
@@ -54,7 +57,7 @@ def config(request):
 
 @pytest.fixture(scope="session", autouse=True)
 def base_url(config):
-    return config.get("DEFAULT", "base_url")
+    return config.get("DEFAULT", "base_url_hrm")
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -98,9 +101,10 @@ def driver(request):
     driver.quit()
 
 @pytest.fixture(scope="session", autouse=True)
-def login_logout(driver, base_url):
+def login_logout(driver, config, base_url):
     # --- LOGIN LOGIC ---
     driver.get(base_url)
+    scenario_login(driver, config)
     # TODO: Replace the following with your actual login steps
     # Example:
     # driver.find_element(By.ID, "username").send_keys("your_username")
@@ -113,3 +117,31 @@ def login_logout(driver, base_url):
     # Example:
     # driver.find_element(By.ID, "logoutBtn").click()
     print("Logged out and closed browser (session-scoped)")
+
+def pytest_runtest_makereport(item, call):
+    """
+    Hook to take screenshot and recover to home page on test failure.
+    """
+    if call.when == "call":
+        outcome = call.excinfo
+        if outcome is not None:
+            # Test failed
+            driver = item.funcargs.get('driver', None)
+            if driver:
+                try:
+                    import time
+                    ts = time.strftime("%Y%m%d-%H%M%S")
+                    filename = f"screenshots/screenshot_fail_{item.name}_{ts}.png"
+                    driver.save_screenshot(filename)
+                    print(f"[pytest hook] Screenshot saved as {filename}")
+                    # Try to go to home page
+                    try:
+                        base_page = basePage(driver, base_url)
+                        base_page.go_home()
+                        print("[pytest hook] Navigated to home page after failure.")
+                    except Exception as e:
+                        print(f"[pytest hook] Could not navigate to home page: {e}")
+                except Exception as e:
+                    print(f"[pytest hook] Could not take screenshot: {e}")
+            else:
+                print("[pytest hook] No driver fixture found for screenshot on failure.")

@@ -6,8 +6,9 @@ DEFAULT_TIMEOUT = 10
 SHORT_TIMEOUT = 5
 LONG_TIMEOUT = 20
 class basePage():
-    def __init__(self, driver):
+    def __init__(self, driver, base_url=None):
         self.driver = driver
+        self.base_url = base_url
 
     def find_element(self, *loc):
         return self.driver.find_element(*loc)
@@ -29,3 +30,9 @@ class basePage():
     def wait_for_element(self, loc, timeout=DEFAULT_TIMEOUT):
         wait = WebDriverWait(self.driver, timeout)
         wait.until(EC.visibility_of_element_located(loc))
+
+    def go_home(self):
+        if self.base_url:
+            self.driver.get(self.base_url)
+        else:
+            self.driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index")
