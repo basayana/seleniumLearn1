@@ -6,3 +6,6 @@ tests/features/login_HRM.feature - to run feature file directly, you can not run
 for allure reports
 pytest .\tests\steps\ --alluredir=allure-results
 allure serve allure-results
+
+to run marked tests in feature file
+ pytest .\tests\steps\ -s --alluredir=allure-results -m qa
