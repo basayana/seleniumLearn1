@@ -1,5 +1,5 @@
-Feature: Login into HRM
+Feature: Add Employees
 
-Scenario: Login into HRM
+Scenario: Add Employees
   Given add employee
   Then delete employee

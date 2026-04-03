@@ -1,6 +1,6 @@
-Feature: Login into HRM
+Feature: Welcome Screen
 
-Scenario: Login into HRM
+Scenario: Welcome Screen
 #  Given login to HRM application
   Then select user role ESS
 

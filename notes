@@ -2,3 +2,7 @@ pytest .\tests\steps\test_login_HRM.py - to run cucumber
 pytest .\tests - to run tests in the folder
 
 tests/features/login_HRM.feature - to run feature file directly, you can not run in python_bdd
+
+for allure reports
+pytest .\tests\steps\ --alluredir=allure-results
+allure serve allure-results

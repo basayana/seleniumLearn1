@@ -1,4 +1,4 @@
-Feature: Login into HRM
+Feature: My Info Save
 
-Scenario: Login into HRM
+Scenario: My Info Save
   Then Save My Info
