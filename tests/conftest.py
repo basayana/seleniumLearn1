@@ -96,3 +96,20 @@ def driver(request):
     #
     # print("Session (cookies, localStorage, sessionStorage) saved successfully", flush=True)
     driver.quit()
+
+@pytest.fixture(scope="session", autouse=True)
+def login_logout(driver, base_url):
+    # --- LOGIN LOGIC ---
+    driver.get(base_url)
+    # TODO: Replace the following with your actual login steps
+    # Example:
+    # driver.find_element(By.ID, "username").send_keys("your_username")
+    # driver.find_element(By.ID, "password").send_keys("your_password")
+    # driver.find_element(By.ID, "loginBtn").click()
+    print("Logged in to HRM application (session-scoped)")
+    yield
+    # --- LOGOUT LOGIC ---
+    # TODO: Replace the following with your actual logout steps
+    # Example:
+    # driver.find_element(By.ID, "logoutBtn").click()
+    print("Logged out and closed browser (session-scoped)")
