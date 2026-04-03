@@ -1,5 +1,6 @@
 from selenium.common import StaleElementReferenceException, ElementClickInterceptedException
 from retry import retry
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 DEFAULT_TIMEOUT = 10
@@ -36,3 +37,33 @@ class basePage():
             self.driver.get(self.base_url)
         else:
             self.driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index")
+
+    def wait_for_spinner(self, spinner_locator, appear_timeout=2, disappear_timeout=10):
+        """
+        Wait for a spinner/loader to appear (short timeout), then disappear (longer timeout).
+        :param spinner_locator: tuple locator for the spinner element
+        :param appear_timeout: seconds to wait for spinner to appear
+        :param disappear_timeout: seconds to wait for spinner to disappear
+        """
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        try:
+            # Wait for spinner to appear (ignore if it doesn't)
+            WebDriverWait(self.driver, appear_timeout).until(
+                EC.visibility_of_element_located(spinner_locator)
+            )
+            print("[wait_for_spinner] Spinner appeared.")
+        except Exception:
+            print("[wait_for_spinner] Spinner did not appear (may be too fast).")
+        # Always wait for spinner to disappear
+        WebDriverWait(self.driver, disappear_timeout).until(
+            EC.invisibility_of_element_located(spinner_locator)
+        )
+        print("[wait_for_spinner] Spinner disappeared.")
+
+    def enter_text_in_textbox(self, loc, text):
+        element = self.find_element(*loc)
+        element.click()  # Focus the textbox
+        action = ActionChains(self.driver)
+        # Select all text (Ctrl+A), then send new text
+        action.key_down("\ue009").send_keys("a").key_up("\ue009").send_keys(text).perform()
