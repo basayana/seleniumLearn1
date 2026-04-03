@@ -2,6 +2,9 @@ import pickle
 import json
 import os
 import time
+
+import allure
+
 from pages.basePage import basePage
 
 import pytest
@@ -133,6 +136,7 @@ def pytest_runtest_makereport(item, call):
                     ts = time.strftime("%Y%m%d-%H%M%S")
                     filename = f"screenshots/screenshot_fail_{item.name}_{ts}.png"
                     driver.save_screenshot(filename)
+                    allure.attach.file(filename, name="Failure Screenshot", attachment_type=allure.attachment_type.PNG)
                     print(f"[pytest hook] Screenshot saved as {filename}")
                     # Try to go to home page
                     try:
